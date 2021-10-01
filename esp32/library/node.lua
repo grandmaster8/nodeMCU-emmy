@@ -231,7 +231,6 @@ function node.restore() end
 ---@return number @target CPU frequency
 function node.setcpufreq(speed) end
 
-
 ---Overrides the default crash handling which always restarts the system.\
 ---It can be used to e.g. write an error to a logfile or to secure connected hardware before restarting.
 ---
