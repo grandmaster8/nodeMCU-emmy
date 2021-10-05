@@ -22,7 +22,7 @@ local connection = {}
 
 ---Creates a connection object which can be configured and then executed.
 ---@param url string|'"http://"'|'"https://"' @The URL to fetch, including the http:// or https:// prefix. Required.
----@param method? integer|'http.GET'|'http.POST'|'http.DELETE'|'http.HEAD' @The HTTP method to use. Optional and may be omitted, the default is http.GET.
+---@param method? integer|'http.GET'|'http.POST'|'http.PUT'|'http.DELETE'|'http.HEAD' @The HTTP method to use. Optional and may be omitted, the default is http.GET.
 ---@param options? CreateHTTPConn @An optional table containing any or all of:
 --- - **async** If true, the request is processed asynchronously, meaning `request()` returns immediately rather than blocking until\
 ---the connection is complete and all callbacks have been made. Some other connection APIs behave differently in asynchronous mode,\
@@ -52,7 +52,7 @@ function connection:on(event, callback) end
 function connection:request() end
 
 ---Sets the connection method.
----@param method? integer|'http.GET'|'http.POST'|'http.DELETE'|'http.HEAD' @(optional) one of
+---@param method? integer|'http.GET'|'http.POST'|'http.PUT'|'http.DELETE'|'http.HEAD' @(optional) one of
 ---@return nil
 function connection:setmethod(method) end
 
@@ -67,11 +67,13 @@ function connection:seturl(url) end
 ---@return nil
 function connection:setheader(name, value) end
 
----Sets the POST data to be used for this request.\
----Also sets the method to http.POST if it isn't already.
----@param data any|nil @"The data to POST.  \n Unless a custom Content-Type header has been set, this data should be  \n in application/x-www-form-urlencoded format. Can be `nil` to unset  \n what to post and the Content-Type header."
+---Sets the body data to be used for this request (for POST, PUT, etc).\
+---If a `Content-Type` header has not already been set, also sets that to\
+--- `application/x-www-form-urlencoded`.\
+---Errors if called while a request is in progress.
+---@param data? any|nil @"The data to POST/PUT/etc.. Unless a custom  \n`Content-Type` header has been set, this data should be in  \n`application/x-www-form-urlencoded` format. Can be `nil` to unset  \nwhat to post and the `Content-Type` header."
 ---@return nil
-function connection:setpostdata(data) end
+function connection:setbody(data) end
 
 ---Completes a callback that was previously\
 ---delayed by returning http.DELAYACK.
@@ -109,3 +111,12 @@ function http.get(url, options, callback) end
 ---@param callback? fun(code:number, data:any) @(optional) Should be `nil` or omitted to specify synchronous behaviour, otherwise a callback function to be invoked when the response has been received or an error occurred, which is called with the arguments **status_code**, **body** and **headers**. In case of an error **status_code** will be a negative number.
 ---@return any|nil @"In synchronous mode, returns 3 results **status_code, body, headers** once the request has completed.  \n In asynchronous mode, returns `nil` immediately."
 function http.post(url, options, body, callback) end
+
+---Executes a single HTTP PUT request and closes the connection. If a `callback` is specifed then the function operates\
+---in asynchronous mode, otherwise it is synchronous.
+---@param url string @The URL to fetch, including the `http://` or `https://` prefix
+---@param options CreateHTTPConn @"Same options as `http.createConnection()`, except that `async` is set for you based on  \nwhether a `callback` is specified or not. May be `nil`."
+---@param body any @The body to post. Required and must already be encoded in the appropriate format, but may be empty.
+---@param callback? function @"(optional) Should be `nil` or omitted to specify synchronous mode, otherwise a callback function to be invoked  \nwhen the response has been received or an error occurred, which is called with the arguments `status_code`, `body` and `headers`.  \nIn case of an error `status_code` will be a negative number."
+---@return any @"In synchronous mode, returns 3 results `status_code, body, headers` once the request has completed.  \nIn asynchronous mode, returns `nil` immediately."
+function http.put(url, options, body, callback) end
