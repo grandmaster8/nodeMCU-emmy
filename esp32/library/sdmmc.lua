@@ -86,9 +86,9 @@ function card:get_info() end
 
 ---Mount filesystem on SD card.
 ---@param ldrv string|'"/SD0"'|'"/SD1"' @name of logical drive
----@param slot? integer|'sdmmc.HS2'|'sdmmc.HS1' @(optional) defaults to sdmmc.HS2 if omitted
----@return boolean
-function card:mount(ldrv, slot) end
+---@param partition? integer @"(optional) the partition number, default is 0,  \n meaning the first available FAT partition."
+---@return boolean #`true` if successful, `false` otherwise
+function card:mount(ldrv, partition) end
 
 ---Read one or more sectors.
 ---@param start_sec integer @first sector to read from
