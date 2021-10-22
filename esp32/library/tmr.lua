@@ -58,3 +58,8 @@ function tObj:stop() end
 ---as those automatically unregister themselves when fired.
 ---@return nil
 function tObj:unregister() end
+
+---Resets the watchdog timer to prevent a reboot due to a perceived hung task.\
+---Use with caution, as this could prevent a reboot to recover from a genuinely hung task.
+---@return nil
+function tmr.wdclr() end
