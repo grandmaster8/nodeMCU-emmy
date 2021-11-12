@@ -174,23 +174,6 @@ function node.LFS.list() end
 ---If any is detected then an error string is returned.
 function node.LFS.reload(imageName) end
 
----@deprecated
----Defines action to take on button press (on the old devkit 0.9), button connected to GPIO 16.\
----This function is only available if the firmware was compiled with DEVKIT_VERSION_0_9 defined.
----@param type string @"type is either string 'long' or 'short'. long: press the key for 3 seconds,  \n short: press shortly(less than 3 seconds)"
----@param foo function @"user defined function which is called when key is pressed. If `nil`, remove  \n the user defined function. Default function: long: change LED blinking rate, short: reset chip"
----@return nil
-function node.key(type, foo) end
-
----@deprecated
----Sets the on/off time for the LED (on the old devkit 0.9), with the LED\
----connected to GPIO16, multiplexed with node.key(). This function is only\
----available if the firmware was compiled with DEVKIT_VERSION_0_9 defined.
----@param low number @"LED off time, LED keeps on when low=0.  \n Unit: milliseconds, time resolution: 80~100ms"
----@param high number @LED on time. Unit: milliseconds, time resolution: 80~100ms
----@return nil
-function node.led(low, high) end
-
 ---Submits a string to the Lua interpreter.\
 ---Similar to pcall(loadstring(str)), but\
 ---without the single-line limitation.
@@ -198,19 +181,14 @@ function node.led(low, high) end
 ---@return nil
 function node.input(str) end
 
----Redirects the Lua interpreter output to a callback function.\
----Optionally also prints it to the serial console.
+---Redirects all standard output (`stdout`) to a callback function. Optionally also prints it\
+---to the console device, as specified in Kconfig under the "ESP System Settings" section.
 ---@param callback function @"`output_fn(str)` a function accept every output as str,  \n and can send the output to a socket (or maybe a file). `nil` to unregister  \n the previous function."
----@param serial_output integer @0 | 1
----|>'1' #output also sent out the serial port.
----|'0' #no serial output.
+---@param console_output integer @0 | 1
+---|>'1' #output also sent out the console port.
+---|'0' #no console output.
 ---@return nil
-function node.output(callback, serial_output) end
-
----Redirects the debugging output from the Espressif SDK to\
----a callback function allowing it to be captured or processed in Lua.
----@param callback function @"`function(str)` a function accepts debugging  \n output as str, and can send the output to a socket (or maybe a file).  \n `nil` to unregister the previous function."
-function node.osoutput(callback) end
+function node.output(callback, console_output) end
 
 ---@deprecated
 ---Moved to `adc.readvdd33()`.
