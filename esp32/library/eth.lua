@@ -94,3 +94,11 @@ function eth.set_ip(cfg) end
 --- - **dns** DNS server
 ---@return nil @"`nil`; An error is thrown in case of invalid  \nparameters or if any of the options can not be set."
 function eth.set_ip(cfg_opts) end
+
+---Configures the interface specific hostname for the ethernet interface.\
+---The ethernet interface must be initialized before the hostname can be configured.\
+---By default the system hostname is used, as configured in the menu config.\
+---An error is thrown in case the hostname cannot be set.
+---@param hostname string @the hostname to use on the ethernet interface
+---@return nil
+function eth.set_hostname(hostname) end
